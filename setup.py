@@ -1,4 +1,5 @@
 from setuptools import setup
+from glob import glob
 
 package_name = 'ntrip_client_ros'
 
@@ -10,6 +11,8 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
+        ('share/' + package_name + '/launch', glob('launch/**')),
+        ('share/' + package_name + '/params', glob('params/**')),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -20,7 +23,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'ntrip_client_ros = ntrip_client_ros.ntripclient_node:main',
+            'ntrip_client_node = ntrip_client_ros.ntrip_client_node:main',
         ],
     },
 )

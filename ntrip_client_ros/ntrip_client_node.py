@@ -69,7 +69,7 @@ class ntripconnect(Thread):
                     data = response.read(2)
                     buf.extend(data)
                     typ = (data[0] * 256 + data[1]) / 16
-                    print (str(datetime.now()), cnt, typ)
+                    self.ntc.get_logger().info(f'date, cnt, type: {datetime.now()} , {cnt}, {int(typ)}')
                     cnt = cnt + 1
                     for x in range(cnt):
                         data = response.read(1)
@@ -77,18 +77,16 @@ class ntripconnect(Thread):
                     rmsg.message = buf
                     rmsg.header.stamp = self.ntc.get_clock().now().to_msg()
                     self.ntc.pub.publish(rmsg)
-                    buf = ""
-                else: print (data)
+                else: self.ntc.get_logger.info(f'data received: {data}')
             else:
                 ''' If zero length data, close connection and reopen it '''
                 restart_count = restart_count + 1
-                print("Zero length ", restart_count)
+                self.ntc.get_logger().info(f'Zero length, {restart_count}')
                 connection.close()
                 connection = HTTPConnection(self.ntc.ntrip_server)
                 connection.request('GET', '/'+self.ntc.ntrip_stream, self.ntc.nmea_gga, headers)
                 response = connection.getresponse()
                 if response.status != 200: raise Exception("blah")
-                buf = ""
 
         connection.close()
 
@@ -98,7 +96,6 @@ class NtripClient(Node):
         self.declare_parameters(
             namespace='',
             parameters = [
-                ('rtcm_topic', 'rtcm'),
                 ('ntrip_server', 'rtk2go.com:2101'),
                 ('ntrip_user', 'USER'),
                 ('ntrip_pass', 'PASS'),
@@ -108,7 +105,7 @@ class NtripClient(Node):
 
         self.pub = None
         # Get parameter values
-        self.rtcm_topic = self.get_parameter('rtcm_topic').value
+        self.rtcm_topic = "rtcm"
         self.ntrip_server = self.get_parameter('ntrip_server').value
         self.ntrip_user = self.get_parameter('ntrip_user').value
         self.ntrip_pass = self.get_parameter('ntrip_pass').value
