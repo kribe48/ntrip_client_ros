@@ -44,16 +44,17 @@ def generate_launch_description():
         ament_index_python.packages.get_package_share_directory('ntrip_client_ros'),
         'params')
     params = os.path.join(config_directory, 'ntrip_client_params.yaml')
-    ublox_gps_node = launch_ros.actions.Node(package='ntrip_client_ros',
+    ntrip_client_node = launch_ros.actions.Node(package='ntrip_client_ros',
                                              executable='ntrip_client_node',
+                                             name='ntrip_client_node',
                                              output='both',
-                                             parameters=[params])
+                                             parameters=[params],
+                                             remappings=[('rtcm', 'sensors/gnss0/rtcm')])
 
-    return launch.LaunchDescription([ublox_gps_node,
-
+    return launch.LaunchDescription([ntrip_client_node,
                                      launch.actions.RegisterEventHandler(
                                          event_handler=launch.event_handlers.OnProcessExit(
-                                             target_action=ublox_gps_node,
+                                             target_action=ntrip_client_node,
                                              on_exit=[launch.actions.EmitEvent(
                                                  event=launch.events.Shutdown())],
                                          )),

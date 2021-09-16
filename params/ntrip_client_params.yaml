@@ -1,8 +1,8 @@
-# Configuration Settings for C94-M8P device
-ntrip_client_ros:
+# Configuration Settings for ntrip client node
+ntrip_client_node:
   ros__parameters:
-    ntrip_server: "rtk2go.com:2101"
-    ntrip_user: "USER"
-    ntrip_pass: "PASS"
-    ntrip_stream: "jemsundabase"
+    ntrip_server: "192.168.1.103:2101"
+    ntrip_user: "leo"
+    ntrip_pass: "rover"
+    ntrip_stream: "test"
     nmea_gga: '$GPGGA,130414.090,5824.333,N,01539.236,E,1,12,1.0,0.0,M,0.0,M,,*65'

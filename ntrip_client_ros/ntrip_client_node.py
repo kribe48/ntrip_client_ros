@@ -112,6 +112,7 @@ class NtripClient(Node):
         self.ntrip_stream = self.get_parameter('ntrip_stream').value
         self.nmea_gga = self.get_parameter('nmea_gga').value
         self.pub = self.create_publisher(Message, self.rtcm_topic, 10)
+        self.get_logger().info(f'connecting to server: {self.ntrip_server}')
         self.connection = None
         self.connection = ntripconnect(self)
         self.connection.start()
